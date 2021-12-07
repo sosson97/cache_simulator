@@ -1,13 +1,19 @@
-CC=g++
-CFLAGS=-I -O2
-DEPS= cache_test.h
-OBJ= belady.o lru.o cache_test.o
+CXX=g++
+CXXFLAGS=-I. -O2
+#CXXFLAGS+=-g
+#DEPS= cache_test.h
+OBJ= belady.o lru.o cache_test.o twolevellru.o
 
-%.o: %.c $(DEPS)
-	$(CC) -c -o $@ $< $ (CFLAGS)
+cache_sim: LINK.o=$(LINK.cpp)
+cache_sim: $(OBJ)
+
+#%.o: %.c $(DEPS)
+#	$(CC) $(CFLAGS) -c -o $@ $< 
 
 cache_sim: $(OBJ)
-	$(CC) -o $@ $^ $(CFLAGS)
+	$(CXX) -o $@ $^ $(CXXFLAGS)
 
 clean:
 	rm *.o cache_sim
+
+.PHONY:clean

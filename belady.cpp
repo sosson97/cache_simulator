@@ -9,8 +9,14 @@ bool BeladyCache::Access(uint64_t key, uint64_t seq_num) {
     if (it == cache_impl_.end()) {
         // miss
         ret = false;
-        if (cap_ == size_)
-            Evict();    
+        if (cap_ == size_) {
+            auto top = eviction_list_.top();
+            auto next_pos = top.first;
+            if (next_pos > next_pos_seq_[seq_num])
+                Evict();
+            else 
+                return ret; 
+        }
         size_++;
         PutNextPos(key, next_pos_seq_[seq_num]);
         cache_impl_[key] = next_pos_seq_[seq_num];

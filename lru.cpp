@@ -11,11 +11,11 @@ bool LRUCache::Access(uint64_t key, uint64_t seq_num) {
         ret = false;
         if (cap_ == size_)
             Evict();    
-        size_++;
     } else {
         //hit
         ret = true;
         eviction_list_.erase(cache_impl_[key]);
+        size_--;
     }
     PutMRU(key);
     return ret;
@@ -24,6 +24,7 @@ bool LRUCache::Access(uint64_t key, uint64_t seq_num) {
 void LRUCache::PutMRU(uint64_t key) {
     eviction_list_.push_front(key);
     cache_impl_[key] = eviction_list_.begin();
+    size_++;
 }
 
 
